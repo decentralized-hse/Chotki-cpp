@@ -62,7 +62,7 @@ fedora_packages=(
 
 case "$ID" in
     ubuntu|debian|pop)
-        apt-get install -y "${debian_packages[@]}"
+        apt install -y "${debian_packages[@]}"
     ;;
     fedora)
         dnf install -y "${fedora_packages[@]}"
