@@ -44,3 +44,6 @@ OPTIONS*
 MANIFEST*
 *.log
 *.sst
+
+# Local dirs
+test_dir
