@@ -34,3 +34,13 @@
 # Tmp files
 build
 .cache
+
+# Rocksdb data
+LOG*
+LOCK
+IDENTITY
+CURRENT
+OPTIONS*
+MANIFEST*
+*.log
+*.sst
