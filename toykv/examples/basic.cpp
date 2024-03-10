@@ -4,13 +4,11 @@
 int main() {
   toykv::KeyValueStorage kv{true};
 
-  auto err = kv.Open("test");
-  if (err != toykv::NoError) {
+  if (auto err = kv.Open("test"); err != toykv::NoError) {
     return 1;
   }
 
-  auto err = kv.Set('O', "123", "456");
-  if (err != toykv::NoError) {
+  if (auto err = kv.Set('O', "123", "456"); err != toykv::NoError) {
     return 1;
   }
 

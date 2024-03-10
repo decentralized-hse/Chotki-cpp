@@ -1,9 +1,9 @@
 set(LIB_TARGET toykv)
 
-option(BUILD_EXAMPLES "Build executable" OFF)
+option(TOYKV_EXAMPLE "Build toykv examples" OFF)
 
-get_filename_component(LIB_INCLUDE_PATH "./include" ABSOLUTE)
-get_filename_component(LIB_PATH "./src" ABSOLUTE)
+get_filename_component(LIB_INCLUDE_PATH "include" ABSOLUTE)
+get_filename_component(LIB_PATH "src" ABSOLUTE)
 
 file(GLOB_RECURSE LIB_HEADERS ${LIB_INCLUDE_PATH}/*.hpp)
 file(GLOB_RECURSE LIB_CXX_SOURCES ${LIB_PATH}/*.cpp)
@@ -17,6 +17,6 @@ target_include_directories(${LIB_TARGET} PUBLIC ${LIB_INCLUDE_PATH})
 set(LIB_DEPENDENCIES rocksdb)
 target_link_libraries(${LIB_TARGET} PUBLIC ${LIB_DEPENDENCIES})
 
-if (BUILD_BIN)
+if (TOYKV_EXAMPLE)
     add_subdirectory(examples)
 endif()

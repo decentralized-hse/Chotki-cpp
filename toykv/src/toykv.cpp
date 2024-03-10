@@ -13,7 +13,7 @@ Error KeyValueStorage::Open(const std::string& name) {
 }
 
 std::pair<std::string, Error> KeyValueStorage::Get(
-    std::byte lit, const std::string& key) const {
+    char lit, const std::string& key) const {
   (void)lit;
   (void)key;
   return {"", Error::NoError};

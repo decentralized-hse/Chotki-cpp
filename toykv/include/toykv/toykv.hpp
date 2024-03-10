@@ -13,8 +13,7 @@ class KeyValueStorage {
 
   Error Open(const std::string& name);
 
-  std::pair<std::string, Error> Get(std::byte lit,
-                                    const std::string& key) const;
+  std::pair<std::string, Error> Get(char lit, const std::string& key) const;
 
   Error Set(char lit, std::string key, std::string value);
   Error Merge(char lit, std::string key, std::string value);
