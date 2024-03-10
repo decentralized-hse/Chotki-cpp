@@ -9,18 +9,22 @@ namespace toykv {
 
 class KeyValueStorage {
  public:
-  KeyValueStorage(bool sync = false);
+  rocksdb::DB* DB();
+
+  KeyValueStorage();
 
   Error Open(const std::string& name);
 
   std::pair<std::string, Error> Get(char lit, const std::string& key) const;
 
-  Error Set(char lit, std::string key, std::string value);
-  Error Merge(char lit, std::string key, std::string value);
+  Error Set(char lit, const std::string& key, const std::string& value);
+  Error Merge(char lit, const std::string& key, const std::string& value);
   Error Commit();
 
  private:
-  bool sync_;
+  rocksdb::DB* db_{nullptr};
+  rocksdb::WriteBatch batch_;
+  bool sync_{};
 };
 
 }  // namespace toykv
