@@ -1,8 +1,9 @@
 #pragma once
 
-#include <string>
+#include <rocksdb/db.h>
 
-#include "errors.hpp"
+#include <string>
+#include <toykv/errors.hpp>
 
 namespace toykv {
 
