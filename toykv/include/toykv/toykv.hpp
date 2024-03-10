@@ -7,6 +7,9 @@
 
 namespace toykv {
 
+/// @note KeyValueIterator must be
+/// either fully exhausted with `Next()` calls
+/// or be explicityly closed with `Closed`
 class KeyValueIterator {
  public:
   ~KeyValueIterator();
@@ -22,9 +25,11 @@ class KeyValueIterator {
  private:
   friend class KeyValueStorage;
 
+  KeyValueIterator(std::string from_key, std::string till_key);
+
   rocksdb::Iterator* iter_{nullptr};
-  std::string from_key_;
-  std::string till_key_;
+  const std::string from_key_;
+  const std::string till_key_;
   rocksdb::Slice from_slice_;
   rocksdb::Slice till_slice_;
 };

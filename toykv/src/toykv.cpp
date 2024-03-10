@@ -24,8 +24,22 @@ bool Success(rocksdb::Status status) {
 
 }  // namespace detail
 
+KeyValueIterator::KeyValueIterator(std::string from_key, std::string till_key)
+    : from_key_{std::move(from_key)},
+      till_key_{std::move(till_key)},
+      from_slice_{from_key_},
+      till_slice_{till_key_} {
+}
+
 KeyValueIterator::~KeyValueIterator() {
-  delete iter_;
+  assert(iter_ == nullptr);
+}
+
+void KeyValueIterator::Close() {
+  if (iter_ != nullptr) {
+    delete iter_;
+    iter_ = nullptr;
+  }
 }
 
 bool KeyValueIterator::Valid() const {
@@ -59,6 +73,11 @@ bool KeyValueIterator::Next() {
   }
 
   iter_->Next();
+
+  if (!iter_->Valid()) {
+    Close();
+    return false;
+  }
 
   return true;
 }
@@ -105,15 +124,14 @@ std::pair<std::string, Error> KeyValueStorage::Get(
 
 KeyValueIterator KeyValueStorage::Range(char lit, const std::string& from,
                                         const std::string& till) const {
-  KeyValueIterator kvi;
-  kvi.from_key_ = detail::ComposeKey(lit, from);
-  kvi.till_key_ = detail::ComposeKey(lit, till);
-  if (kvi.from_key_.compare(kvi.till_key_) > 0) {
-    std::swap(kvi.from_key_, kvi.till_key_);
+  auto from_key = detail::ComposeKey(lit, from);
+  auto till_key = detail::ComposeKey(lit, till);
+
+  if (from_key.compare(till_key) > 0) {
+    from_key.swap(till_key);
   }
 
-  kvi.from_slice_ = kvi.from_key_;
-  kvi.till_slice_ = kvi.till_key_;
+  KeyValueIterator kvi{std::move(from_key), std::move(till_key)};
 
   rocksdb::ReadOptions io;
   io.iterate_lower_bound = &kvi.from_slice_;

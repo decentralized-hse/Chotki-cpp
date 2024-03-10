@@ -80,23 +80,31 @@ TEST(TestToyKV, Simple) {
 }
 
 TEST(TestToyKV, Range) {
-  detail::DbFileRemover _{"range.db"};
+  for (const auto db_name : {"non-sync", "sync.db"}) {
+    detail::DbFileRemover _{db_name};
 
-  toykv::KeyValueStorage kv;
-  ASSERT_EQ(kv.Open("range.db"), toykv::NoError);
-  ASSERT_TRUE(kv.DB());
+    toykv::KeyValueStorage kv;
+    ASSERT_EQ(kv.Open(db_name), toykv::NoError);
+    ASSERT_TRUE(kv.DB());
 
-  detail::Int i{0};
-  for (; i.i < (1 << 13); i.Inc()) {
-    ASSERT_EQ(kv.Set('N', i.String(), "set"), toykv::NoError);
-  }
-  ASSERT_EQ(kv.Commit(), toykv::NoError);
+    auto set_begin = std::chrono::high_resolution_clock::now();
+    detail::Int i{0};
+    for (; i.i < (1 << 20); i.Inc()) {
+      ASSERT_EQ(kv.Set('N', i.String(), "set"), toykv::NoError);
+    }
+    ASSERT_EQ(kv.Commit(), toykv::NoError);
+    auto set_end = std::chrono::high_resolution_clock::now();
 
-  const detail::Int fro{1100};
-  const detail::Int to{2233};
+    auto set_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            set_end - set_begin)
+                            .count();
+    std::cerr << db_name << " set phase duration: " << set_duration << "ms"
+              << std::endl;
 
-  i = fro;
-  {
+    const detail::Int fro{1100};
+    const detail::Int to{2233};
+
+    i = fro;
     auto rng = kv.Range('N', fro.String(), to.String());
     for (; rng.Valid();) {
       ASSERT_EQ(rng.Liter(), 'N');
@@ -111,8 +119,8 @@ TEST(TestToyKV, Range) {
     ASSERT_EQ(rng.Key(), "");
     ASSERT_EQ(rng.Value(), "");
     ASSERT_FALSE(rng.Next());
-  }
 
-  kv.Close();
-  ASSERT_FALSE(kv.DB());
+    kv.Close();
+    ASSERT_FALSE(kv.DB());
+  }
 }
