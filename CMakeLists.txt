@@ -9,6 +9,8 @@ include(cmake/CCache.cmake)
 include(cmake/CheckPlatform.cmake)
 include(cmake/CheckCompiler.cmake)
 include(cmake/CompileOptions.cmake)
+include(cmake/MakeExample.cmake)
+include(cmake/MakeTest.cmake)
 
 add_subdirectory(third_party)
 add_subdirectory(toykv)

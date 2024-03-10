@@ -1,6 +1,7 @@
 set(LIB_TARGET toykv)
 
-option(TOYKV_EXAMPLE "Build toykv examples" OFF)
+option(TOYKV_EXAMPLES "Build toykv examples" OFF)
+option(TOYKV_TESTS "Build toykv tests" OFF)
 
 get_filename_component(LIB_INCLUDE_PATH "include" ABSOLUTE)
 get_filename_component(LIB_PATH "src" ABSOLUTE)
@@ -17,6 +18,10 @@ target_include_directories(${LIB_TARGET} PUBLIC ${LIB_INCLUDE_PATH})
 set(LIB_DEPENDENCIES rocksdb)
 target_link_libraries(${LIB_TARGET} PUBLIC ${LIB_DEPENDENCIES})
 
-if (TOYKV_EXAMPLE)
+if (TOYKV_EXAMPLES)
     add_subdirectory(examples)
+endif()
+
+if (TOYKV_TESTS)
+    add_subdirectory(tests)
 endif()
