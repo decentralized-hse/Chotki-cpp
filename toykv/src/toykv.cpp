@@ -1,38 +1,39 @@
-#include "toykv/toykv.hpp"
+#include <toykv/toykv.hpp>
 
 namespace toykv {
 
-KeyValueStorage(bool sync)
+KeyValueStorage::KeyValueStorage(bool sync)
     : sync_{sync} {
 }
 
-Error Open(const std::string& name) {
+Error KeyValueStorage::Open(const std::string& name) {
   (void)name;
 
   return Error::NoError;
 }
 
-std::pair<std::string, Error> Get(std::byte lit, const std::string& key) const {
+std::pair<std::string, Error> KeyValueStorage::Get(
+    std::byte lit, const std::string& key) const {
   (void)lit;
   (void)key;
   return {"", Error::NoError};
 }
 
-Error Set(char lit, std::string key, std::string value) {
+Error KeyValueStorage::Set(char lit, std::string key, std::string value) {
   (void)lit;
   (void)key;
   (void)value;
   return Error::NoError;
 }
 
-Error Merge(char lit, std::string key, std::string value) {
+Error KeyValueStorage::Merge(char lit, std::string key, std::string value) {
   (void)lit;
   (void)key;
   (void)value;
   return Error::NoError;
 }
 
-Error Commit() {
+Error KeyValueStorage::Commit() {
   return Error::NoError;
 }
 

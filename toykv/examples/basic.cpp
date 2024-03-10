@@ -1,6 +1,5 @@
 #include <iostream>
-
-#include "toykv/toykv.hpp"
+#include <toykv/toykv.hpp>
 
 int main() {
   toykv::KeyValueStorage kv{true};
